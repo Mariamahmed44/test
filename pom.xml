@@ -4,9 +4,10 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.automationexercise</groupId>
-    <artifactId>LumaProject</artifactId>
+    <groupId>com.konecta.project</groupId>
+    <artifactId>Konecta_Project</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>Konecta_Project</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,7 +18,6 @@
         <poi.version>5.2.5</poi.version>
         <extentreports.version>5.0.9</extentreports.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
-        <!-- Logging -->
         <log4j.version>2.21.1</log4j.version>
     </properties>
 
