@@ -1,4 +1,50 @@
 package pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
 public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
+    WebDriver driver;
+    WebDriverWait wait;
+
+    //CONSTRUCTOR
+    public BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage(WebDriver driver){
+        this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    //LOCATORS
+    By QuantityInput = By.xpath("//input[@name='quantity']");
+    By AddToCartBtn = By.xpath("//button[@name='save_to_cart']");
+    By QuantityCheckInPopUp = By.xpath("//label[normalize-space()='QTY: 10']");
+    By CheckoutBtnInPopUp = By.xpath("//button[@id='checkOutPopUp']");
+
+    //Methods
+    public void setQuantity(String quantity) {
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(QuantityInput));
+        element.click();
+        element.sendKeys(quantity);
+    }
+
+    public void clickAddToCart(){
+        driver.findElement(AddToCartBtn).click();
+    }
+
+    public String getPopupQuantity() {
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(QuantityCheckInPopUp));
+        return element.getText();
+    }
+
+    public void clickCheckout() {
+        driver.findElement(CheckoutBtnInPopUp).click();
+    }
+
+
+
+
 }
