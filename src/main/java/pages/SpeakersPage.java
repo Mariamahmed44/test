@@ -29,11 +29,11 @@ public class SpeakersPage {
         WebElement element= wait.until(ExpectedConditions.elementToBeClickable(blackColorFilter));
         element.click();
     }
-    public HpSpeakerDetailsPage clickOnHpSpeaker(){
+    public HPRoarMiniWirelessSpeakerDetailsPage clickOnHpSpeaker(){
 
         WebElement detail= wait.until(ExpectedConditions.elementToBeClickable(hpSpeaker));
         detail.click();
-        return new HpSpeakerDetailsPage(driver);
+        return new HPRoarMiniWirelessSpeakerDetailsPage(driver);
     }
     public String productName(){
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(hpSpeaker));
