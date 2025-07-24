@@ -17,7 +17,7 @@ public class HPElite_x2_1011G1TabletDetailsPage  {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    //Locators
+    //locators
     final private By ProductPageIdentity = By.xpath("//h2[@class='roboto-regular product_specifications ng-scope']");
     final private By ProductAddToCart = By.xpath("//button[@name='save_to_cart']");
     final private By ProductName = By.xpath("//h1[@class='roboto-regular screen768 ng-binding']");
