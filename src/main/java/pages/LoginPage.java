@@ -40,6 +40,30 @@ public class LoginPage {
         }
     }
 
+    public void waitForPopupToDisappear(WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        By popupLocator = By.cssSelector("div.PopUp");
+
+        try {
+            // Wait until the popup is invisible or removed
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(popupLocator));
+            System.out.println("Popup closed.");
+        } catch (TimeoutException e) {
+            System.out.println("Popup did not close within timeout.");
+        }
+    }
+
+    public void waitForLoginToClose(WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        By loginForm = By.cssSelector("div[ng-show='loginSection']"); // login modal container
+
+        try {
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(loginForm));
+            System.out.println("Login form closed.");
+        } catch (TimeoutException e) {
+            System.out.println("Login form did not close within timeout.");
+        }
+    }
     /**
      * Navigates to the homepage and waits until the page is loaded.
      */
@@ -79,13 +103,11 @@ public class LoginPage {
      * Submits the login form by clicking the sign-in button.
      * Falls back to JavaScript click if normal click fails.
      */
-    public void clickLoginButton() {
-        waitForLoaderToDisappear();
-        try {
+    public HomePage clickLoginButton() {
+
             wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
-        } catch (WebDriverException e) {
-            WebElement button = driver.findElement(signInButton);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
-        }
+        waitForLoginToClose(driver);
+        waitForPopupToDisappear(driver);
+        return new HomePage(driver);
     }
 }

@@ -21,7 +21,7 @@ public class SpeakersPage {
     private final By colorFilter = By.id("accordionColor");
     private final By blackColorFilter = By.id("productsColors414141");
     private final By manufactureFilter = By.xpath("//h4[normalize-space(.)='MANUFACTURER']");
-    private final By hpManufactureFilter = By.xpath("//label[@for='manufacturer_1' and text()='HP']");
+    private final By hpManufactureFilter = By.xpath("//input[@name='manufacturer_1' and @type='checkbox']");
     private final By hpSpeaker = By.xpath("//a[contains(text(),'HP Roar Mini Wireless Speaker')]");
 
 

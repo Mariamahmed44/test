@@ -29,6 +29,12 @@ public class TwoItemsPurchaseTest extends Setup {
         }catch (Exception e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
+//        try{
+//            Assert.assertTrue(homePage.CheckSpeakersButtonIsVisible());
+//            test.log(Status.PASS,"Speakers Button Is Visible");
+//        }catch (Exception e){
+//            test.log(Status.FAIL,e.getCause() + e.getMessage());
+//        }
 
         SpeakersPage speakersPage =homePage.clickSpeakersButton();
 

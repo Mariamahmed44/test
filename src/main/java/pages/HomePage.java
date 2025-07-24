@@ -30,11 +30,15 @@ public class HomePage {
     private By tabletsButton = By.xpath("//div[@id='tabletsImg']");
     private By headphonesButton = By.xpath("//div[@id='headphonesImg']");
     private By hpEliteBookFolioButton = By.xpath("//label[@id='details_10']");
-
+//div[@id='speakersImg']//span[@id='speakersTxt' and text()='SPEAKERS']
 
     public boolean CheckHomePageIsVisible() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(homePageIdent));
         return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+    }
+    public boolean CheckSpeakersButtonIsVisible() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(speakersButton));
+        return wait.until(ExpectedConditions.elementToBeClickable(element)).isDisplayed();
     }
 //To Check Home Page Is Visible
 
