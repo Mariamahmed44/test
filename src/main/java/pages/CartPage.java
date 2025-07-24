@@ -2,13 +2,15 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
 public class CartPage {
-    WebDriver driver;
-    WebDriverWait wait;
+    private WebDriver driver;
+    private WebDriverWait wait;
 
     //CONSTRUCTOR
     public CartPage(WebDriver driver){
@@ -17,13 +19,14 @@ public class CartPage {
     }
 
     //LOCATORS
-    By EditBtn = By.xpath("//a[@class='edit ng-scope']");
+    final private By EditBtn = By.xpath("//a[@class='edit ng-scope']");
 
 
 
     //METHODS
     public HPElitePad1000G2TabletDetailsPage ClickEdit(){
-        driver.findElement(EditBtn).click();
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(EditBtn));
+        element.click();
         return new HPElitePad1000G2TabletDetailsPage(driver);
     }
 }
