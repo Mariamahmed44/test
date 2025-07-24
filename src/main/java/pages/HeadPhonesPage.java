@@ -9,8 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class HeadPhonesPage {
-    WebDriver driver;
-    WebDriverWait wait;
+    private WebDriver driver;
+    private WebDriverWait wait;
 
     //CONSTRUCTOR
     public HeadPhonesPage(WebDriver driver){
@@ -19,7 +19,7 @@ public class HeadPhonesPage {
     }
 
     //Locators
-    By BeatsStudioHeadPhone = By.xpath("//img[@id='15']");
+    final private By BeatsStudioHeadPhone = By.xpath("//img[@id='15']");
 
     //METHODS
     public BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage ClickOnProduct(){

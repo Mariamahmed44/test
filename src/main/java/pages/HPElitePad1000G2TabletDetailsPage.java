@@ -45,7 +45,8 @@ public class HPElitePad1000G2TabletDetailsPage {
     }
 
     public void ClickOnGreyColorToEdit(){
-        driver.findElement(GrayColor);
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(GrayColor));
+        element.click();
     }
 
     public CartPage ClickAddToCart(){
