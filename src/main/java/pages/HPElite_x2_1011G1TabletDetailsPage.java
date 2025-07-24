@@ -28,10 +28,10 @@ public class HPElite_x2_1011G1TabletDetailsPage  {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductPageIdentity));
         return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
     }
-    public HPElite_x2_1011G1TabletDetailsPage EliteTabletG1ClickAddToCart() {
+    public void EliteTabletG1ClickAddToCart() {
         driver.findElement(ProductAddToCart).click();
 
-        return null;
+       
     }
     public String VerifyEliteTabletG1Name() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductName));
