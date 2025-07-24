@@ -20,6 +20,8 @@ public class HPElitePad1000G2TabletDetailsPage {
     final private By ProductPageIdentity = By.xpath("//h2[@class='roboto-regular product_specifications ng-scope']");
     final private By ProductAddToCart = By.xpath("//button[@name='save_to_cart']");
     final private By ProductName = By.xpath("//h1[@class='roboto-regular screen768 ng-binding']");
+    final private By TabletBreadCrumb = By.xpath("//a[@class='ng-binding']");
+
 
 
     //Methods
@@ -27,16 +29,20 @@ public class HPElitePad1000G2TabletDetailsPage {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductPageIdentity));
         return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
     }
-    public HPElitePad1000G2TabletDetailsPage ElitePadG2ClickAddToCart() {
+    public void ElitePadG2ClickAddToCart() {
         driver.findElement(ProductAddToCart).click();
 
-        return null;
     }
     public String VerifyElitePadG2Name() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductName));
         return wait.until(ExpectedConditions.visibilityOf(element)).getText();
-
-
     }
+
+    public TabletsPage ElitePadG2ClickTabletBreadCrumb() {
+        driver.findElement(TabletBreadCrumb).click();
+
+        return new TabletsPage(driver);
+    }
+
 
 }
