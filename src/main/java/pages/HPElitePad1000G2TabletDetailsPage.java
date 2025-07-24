@@ -21,6 +21,7 @@ public class HPElitePad1000G2TabletDetailsPage {
     final private By ProductAddToCart = By.xpath("//button[@name='save_to_cart']");
     final private By ProductName = By.xpath("//h1[@class='roboto-regular screen768 ng-binding']");
     final private By TabletBreadCrumb = By.xpath("//a[@class='ng-binding']");
+    final private By GrayColor = By.xpath("//span[@title='GRAY']");
 
 
 
@@ -40,8 +41,16 @@ public class HPElitePad1000G2TabletDetailsPage {
 
     public TabletsPage ElitePadG2ClickTabletBreadCrumb() {
         driver.findElement(TabletBreadCrumb).click();
-
         return new TabletsPage(driver);
+    }
+
+    public void ClickOnGreyColorToEdit(){
+        driver.findElement(GrayColor);
+    }
+
+    public CartPage ClickAddToCart(){
+        driver.findElement(ProductAddToCart).click();
+        return new CartPage(driver);
     }
 
 
