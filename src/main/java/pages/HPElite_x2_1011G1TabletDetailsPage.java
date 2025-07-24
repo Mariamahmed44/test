@@ -21,6 +21,8 @@ public class HPElite_x2_1011G1TabletDetailsPage  {
     final private By ProductPageIdentity = By.xpath("//h2[@class='roboto-regular product_specifications ng-scope']");
     final private By ProductAddToCart = By.xpath("//button[@name='save_to_cart']");
     final private By ProductName = By.xpath("//h1[@class='roboto-regular screen768 ng-binding']");
+    final private By XIconForHpEliteX2inPopUp = By.xpath("//tbody/tr[1]/td[3]/div[1]/div[1]");
+    final private By CartIcon = By.xpath("//a[@id='shoppingCartLink']//*[name()='svg']");
 
 
     //Methods
@@ -28,16 +30,23 @@ public class HPElite_x2_1011G1TabletDetailsPage  {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductPageIdentity));
         return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
     }
+
     public void EliteTabletG1ClickAddToCart() {
         driver.findElement(ProductAddToCart).click();
 
-       
     }
     public String VerifyEliteTabletG1Name() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductName));
         return wait.until(ExpectedConditions.visibilityOf(element)).getText();
+    }
 
+    public void ClickOnXIconForHpEliteX2inPopUp(){
+        driver.findElement(XIconForHpEliteX2inPopUp).click();
+    }
 
+    public CartPage ClickOnCartIcon(){
+        driver.findElement(CartIcon).click();
+        return new CartPage(driver);
     }
 
 }
