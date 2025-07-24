@@ -1,30 +1,26 @@
 package pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
 /**
- * Page Object class for the login functionality.
+ * Page Object class for the login functionality using
  */
 public class LoginPage {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // Login form fields
-    @FindBy(name = "username")
-    private WebElement usernameInput;
-
-    @FindBy(name = "password")
-    private WebElement passwordInput;
-
-    @FindBy(id = "sign_in_btn")
-    private WebElement signInButton;
+    // Locators
+    private final By usernameInput = By.name("username");
+    private final By passwordInput = By.name("password");
+    private final By signInButton = By.id("sign_in_btn");
+    private final By menuUserLink = By.id("menuUserLink");
+    private final By popupForm = By.cssSelector(".PopUp");
+    private final By loader = By.cssSelector(".loader");
 
     /**
      * Constructor initializes WebDriver and WebDriverWait.
@@ -32,7 +28,6 @@ public class LoginPage {
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(60));
-        PageFactory.initElements(driver, this);
     }
 
     /**
@@ -40,7 +35,7 @@ public class LoginPage {
      */
     private void waitForLoaderToDisappear() {
         try {
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".loader")));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
         } catch (TimeoutException ignored) {
         }
     }
@@ -58,24 +53,26 @@ public class LoginPage {
      */
     public void openLoginForm() {
         waitForLoaderToDisappear();
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("menuUserLink"))).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".PopUp")));
+        wait.until(ExpectedConditions.elementToBeClickable(menuUserLink)).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(popupForm));
     }
 
     /**
      * Enters the provided username.
      */
     public void enterUsername(String username) {
-        wait.until(ExpectedConditions.visibilityOf(usernameInput)).clear();
-        usernameInput.sendKeys(username);
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(usernameInput));
+        usernameField.clear();
+        usernameField.sendKeys(username);
     }
 
     /**
      * Enters the provided password.
      */
     public void enterPassword(String password) {
-        wait.until(ExpectedConditions.visibilityOf(passwordInput)).clear();
-        passwordInput.sendKeys(password);
+        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput));
+        passwordField.clear();
+        passwordField.sendKeys(password);
     }
 
     /**
@@ -87,7 +84,8 @@ public class LoginPage {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
         } catch (WebDriverException e) {
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", signInButton);
+            WebElement button = driver.findElement(signInButton);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
         }
     }
 }
