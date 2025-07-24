@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
 
 /**
- * Page Object class for the login functionality using
+ * Page Object class for the login functionality
  */
 public class LoginPage {
 
