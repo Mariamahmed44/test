@@ -27,10 +27,9 @@ public class HPEliteBookFolioDetailsPage {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductPageIdentity));
         return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
     }
-    public HPEliteBookFolioDetailsPage EliteBookClickAddToCart() {
+    public void EliteBookClickAddToCart() {
         driver.findElement(ProductAddToCart).click();
 
-        return null;
     }
       public String VerifyEliteBookName() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductName));
