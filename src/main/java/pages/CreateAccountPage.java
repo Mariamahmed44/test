@@ -1,8 +1,6 @@
 package pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,73 +8,41 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
 
 /**
- * Page Object class for the "Create New Account" functionality.
+ * Page Object class for the "Create New Account" functionality
  */
 public class CreateAccountPage {
+
     private final WebDriver driver;
     private final WebDriverWait wait;
     private final JavascriptExecutor js;
 
-    // UI Elements
-    @FindBy(id = "menuUser")
-    private WebElement userIcon;
+    // Locators
+    private final By userIcon = By.id("menuUser");
+    private final By createNewAccountLink = By.xpath("//a[text()='CREATE NEW ACCOUNT']");
+    private final By loader = By.cssSelector(".loader");
 
-    @FindBy(xpath = "//a[text()='CREATE NEW ACCOUNT']")
-    private WebElement createNewAccountLink;
-
-    @FindBy(css = ".loader")
-    private WebElement loader;
-
-    @FindBy(name = "usernameRegisterPage")
-    private WebElement usernameInput;
-
-    @FindBy(name = "emailRegisterPage")
-    private WebElement emailInput;
-
-    @FindBy(name = "passwordRegisterPage")
-    private WebElement passwordInput;
-
-    @FindBy(name = "confirm_passwordRegisterPage")
-    private WebElement confirmPasswordInput;
-
-    @FindBy(name = "first_nameRegisterPage")
-    private WebElement firstNameInput;
-
-    @FindBy(name = "last_nameRegisterPage")
-    private WebElement lastNameInput;
-
-    @FindBy(name = "phone_numberRegisterPage")
-    private WebElement phoneInput;
-
-    @FindBy(name = "countryListboxRegisterPage")
-    private WebElement countryDropdown;
-
-    @FindBy(name = "cityRegisterPage")
-    private WebElement cityInput;
-
-    @FindBy(name = "addressRegisterPage")
-    private WebElement addressInput;
-
-    @FindBy(name = "state_/_province_/_regionRegisterPage")
-    private WebElement stateInput;
-
-    @FindBy(name = "postal_codeRegisterPage")
-    private WebElement postalCodeInput;
-
-    @FindBy(name = "i_agree")
-    private WebElement agreeCheckbox;
-
-    @FindBy(id = "register_btn")
-    private WebElement registerButton;
+    private final By usernameInput = By.name("usernameRegisterPage");
+    private final By emailInput = By.name("emailRegisterPage");
+    private final By passwordInput = By.name("passwordRegisterPage");
+    private final By confirmPasswordInput = By.name("confirm_passwordRegisterPage");
+    private final By firstNameInput = By.name("first_nameRegisterPage");
+    private final By lastNameInput = By.name("last_nameRegisterPage");
+    private final By phoneInput = By.name("phone_numberRegisterPage");
+    private final By countryDropdown = By.name("countryListboxRegisterPage");
+    private final By cityInput = By.name("cityRegisterPage");
+    private final By addressInput = By.name("addressRegisterPage");
+    private final By stateInput = By.name("state_/_province_/_regionRegisterPage");
+    private final By postalCodeInput = By.name("postal_codeRegisterPage");
+    private final By agreeCheckbox = By.name("i_agree");
+    private final By registerButton = By.id("register_btn");
 
     /**
-     * Constructor initializes driver, wait, and PageFactory elements.
+     * Constructor initializes driver and wait.
      */
     public CreateAccountPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         this.js = (JavascriptExecutor) driver;
-        PageFactory.initElements(driver, this);
     }
 
     /**
@@ -84,7 +50,7 @@ public class CreateAccountPage {
      */
     private void waitForLoaderToDisappear() {
         try {
-            wait.until(ExpectedConditions.invisibilityOf(loader));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
         } catch (TimeoutException ignored) {
         }
     }
@@ -102,9 +68,10 @@ public class CreateAccountPage {
     public void openRegistrationForm() {
         waitForLoaderToDisappear();
         wait.until(ExpectedConditions.elementToBeClickable(userIcon)).click();
-        wait.until(ExpectedConditions.visibilityOf(createNewAccountLink));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(createNewAccountLink));
         waitForLoaderToDisappear();
-        js.executeScript("arguments[0].click();", createNewAccountLink);
+        WebElement createLink = driver.findElement(createNewAccountLink);
+        js.executeScript("arguments[0].click();", createLink);
     }
 
     /**
@@ -116,26 +83,30 @@ public class CreateAccountPage {
             String country, String city, String address,
             String state, String postalCode) {
 
-        wait.until(ExpectedConditions.visibilityOf(usernameInput)).sendKeys(username);
-        emailInput.sendKeys(email);
-        passwordInput.sendKeys(password);
-        confirmPasswordInput.sendKeys(password); // repeat password
-        firstNameInput.sendKeys(firstName);
-        lastNameInput.sendKeys(lastName);
-        phoneInput.sendKeys(phone);
-        new Select(countryDropdown).selectByVisibleText(country);
-        cityInput.sendKeys(city);
-        addressInput.sendKeys(address);
-        stateInput.sendKeys(state);
-        postalCodeInput.sendKeys(postalCode);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameInput)).sendKeys(username);
+        driver.findElement(emailInput).sendKeys(email);
+        driver.findElement(passwordInput).sendKeys(password);
+        driver.findElement(confirmPasswordInput).sendKeys(password);
+        driver.findElement(firstNameInput).sendKeys(firstName);
+        driver.findElement(lastNameInput).sendKeys(lastName);
+        driver.findElement(phoneInput).sendKeys(phone);
+
+        WebElement countryElement = driver.findElement(countryDropdown);
+        new Select(countryElement).selectByVisibleText(country);
+
+        driver.findElement(cityInput).sendKeys(city);
+        driver.findElement(addressInput).sendKeys(address);
+        driver.findElement(stateInput).sendKeys(state);
+        driver.findElement(postalCodeInput).sendKeys(postalCode);
     }
 
     /**
      * Selects the "I Agree" checkbox if not already selected.
      */
     public void agreeToTerms() {
-        if (!agreeCheckbox.isSelected()) {
-            agreeCheckbox.click();
+        WebElement checkbox = driver.findElement(agreeCheckbox);
+        if (!checkbox.isSelected()) {
+            checkbox.click();
         }
     }
 
@@ -148,7 +119,6 @@ public class CreateAccountPage {
 
     /**
      * Verifies if registration was successful by checking the final URL.
-     * @return true if successful, false otherwise
      */
     public boolean isRegistrationSuccessful() {
         try {
