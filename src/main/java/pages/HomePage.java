@@ -15,11 +15,10 @@ public class HomePage {
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(40));
 
     }
-    JavascriptExecutor js=(JavascriptExecutor)driver;
-    //Define JavaScript Executor To Be Able To Add Scripts Like Scroll Down Etc.
+
 
 
     private By homePageIdent = By.xpath("//h3[text()='SPECIAL OFFER']");
@@ -39,9 +38,10 @@ public class HomePage {
     }
 //To Check Home Page Is Visible
 
-    public void ClickLoginOrSignUpButton(){
+    public LoginPage ClickLoginOrSignUpButton(){
 
         wait.until(ExpectedConditions.elementToBeClickable(userButton)).click();
+        return new LoginPage(driver);
     }
 //Click On User Button If There Is No LoggedIn User
 
@@ -85,7 +85,8 @@ public class HomePage {
       }
 
     public void ScrollToPopularItemsArea(){
-
+        JavascriptExecutor js=(JavascriptExecutor)driver;
+        //Define JavaScript Executor To Be Able To Add Scripts Like Scroll Down Etc.
         js.executeScript("window.scroll(0,1200)");
     }
     //JavaScript Code To Scroll To Popular Items Area

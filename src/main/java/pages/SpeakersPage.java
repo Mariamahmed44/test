@@ -17,10 +17,20 @@ public class SpeakersPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    private By speakersPageIden = By.xpath("//h3[normalize-space(text())='SPEAKERS']");
     private final By colorFilter = By.id("accordionColor");
     private final By blackColorFilter = By.id("productsColors414141");
+    private final By manufactureFilter = By.xpath("//h4[normalize-space(.)='MANUFACTURER']");
+    private final By hpManufactureFilter = By.xpath("//label[@for='manufacturer_1' and text()='HP']");
     private final By hpSpeaker = By.xpath("//a[contains(text(),'HP Roar Mini Wireless Speaker')]");
 
+
+
+
+    public boolean CheckSpeakersPageIsVisible() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(speakersPageIden));
+        return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+    }
     public void clickOnColorFilter() {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(colorFilter));
         element.click();
@@ -28,6 +38,15 @@ public class SpeakersPage {
 
     public void clickOnBlackColorFilter() {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(blackColorFilter));
+        element.click();
+    }
+    public void clickOnManufactureFilter() {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(manufactureFilter));
+        element.click();
+    }
+
+    public void clickOnHPManufactureFilter() {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(hpManufactureFilter));
         element.click();
     }
 
