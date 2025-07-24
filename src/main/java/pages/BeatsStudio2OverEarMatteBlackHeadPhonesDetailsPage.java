@@ -40,8 +40,9 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
         return element.getText();
     }
 
-    public void clickCheckout() {
+    public CheckOutPage clickCheckout() {
         driver.findElement(CheckoutBtnInPopUp).click();
+        return new CheckOutPage(driver);
     }
 
 
