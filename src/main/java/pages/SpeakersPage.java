@@ -12,34 +12,33 @@ public class SpeakersPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    public SpeakersPage (WebDriver driver){
-        this.driver=driver;
+    public SpeakersPage(WebDriver driver) {
+        this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
-    private By colorFilter = By.id("accordionColor");
-    private By blackColorFilter =By.id("productsColors414141");
-    private By hpSpeaker = By.xpath("//a[contains(text(),'HP Roar Mini Wireless Speaker')]");
 
-    public void clickOnColorFilter(){
+    private final By colorFilter = By.id("accordionColor");
+    private final By blackColorFilter = By.id("productsColors414141");
+    private final By hpSpeaker = By.xpath("//a[contains(text(),'HP Roar Mini Wireless Speaker')]");
 
-        WebElement element= wait.until(ExpectedConditions.elementToBeClickable(colorFilter));
+    public void clickOnColorFilter() {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(colorFilter));
         element.click();
     }
-    public void clickOnBlackColorFilter(){
-        WebElement element= wait.until(ExpectedConditions.elementToBeClickable(blackColorFilter));
+
+    public void clickOnBlackColorFilter() {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(blackColorFilter));
         element.click();
     }
-    public HPRoarMiniWirelessSpeakerDetailsPage clickOnHpSpeaker(){
 
-        WebElement detail= wait.until(ExpectedConditions.elementToBeClickable(hpSpeaker));
+    public HPRoarMiniWirelessSpeakerDetailsPage clickOnHpSpeaker() {
+        WebElement detail = wait.until(ExpectedConditions.elementToBeClickable(hpSpeaker));
         detail.click();
         return new HPRoarMiniWirelessSpeakerDetailsPage(driver);
     }
-    public String productName(){
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(hpSpeaker));
-        return wait.until(ExpectedConditions.visibilityOf(element)).getText();
 
+    public String productName() {
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(hpSpeaker));
+        return element.getText();
     }
-
 }
-
