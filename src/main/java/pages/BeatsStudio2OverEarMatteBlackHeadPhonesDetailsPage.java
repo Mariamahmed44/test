@@ -9,8 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
-    WebDriver driver;
-    WebDriverWait wait;
+    private WebDriver driver;
+    private WebDriverWait wait;
 
     //CONSTRUCTOR
     public BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage(WebDriver driver){
@@ -19,10 +19,10 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
     }
 
     //LOCATORS
-    By QuantityInput = By.xpath("//input[@name='quantity']");
-    By AddToCartBtn = By.xpath("//button[@name='save_to_cart']");
-    By QuantityCheckInPopUp = By.xpath("//label[normalize-space()='QTY: 10']");
-    By CheckoutBtnInPopUp = By.xpath("//button[@id='checkOutPopUp']");
+    final private By QuantityInput = By.xpath("//input[@name='quantity']");
+    final private By AddToCartBtn = By.xpath("//button[@name='save_to_cart']");
+    final private By QuantityCheckInPopUp = By.xpath("//label[normalize-space()='QTY: 10']");
+    final private By CheckoutBtnInPopUp = By.xpath("//button[@id='checkOutPopUp']");
 
     //Methods
     public void setQuantity(String quantity) {
