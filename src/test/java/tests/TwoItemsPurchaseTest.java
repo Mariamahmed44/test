@@ -9,7 +9,6 @@ import setup.Setup;
 public class TwoItemsPurchaseTest extends Setup {
 
 
-
     @Test
     public void verifyTwoItemsPurchased() {
         test.info("Test case started");

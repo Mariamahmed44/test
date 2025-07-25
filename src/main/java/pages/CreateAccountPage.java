@@ -14,13 +14,16 @@ public class CreateAccountPage {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
-    private final JavascriptExecutor js;
+
+    /**
+     * Constructor initializes driver and wait.
+     */
+    public CreateAccountPage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    }
 
     // Locators
-    private final By userIcon = By.id("menuUser");
-    private final By createNewAccountLink = By.xpath("//a[text()='CREATE NEW ACCOUNT']");
-    private final By loader = By.cssSelector(".loader");
-
     private final By usernameInput = By.name("usernameRegisterPage");
     private final By emailInput = By.name("emailRegisterPage");
     private final By passwordInput = By.name("passwordRegisterPage");
@@ -35,44 +38,8 @@ public class CreateAccountPage {
     private final By postalCodeInput = By.name("postal_codeRegisterPage");
     private final By agreeCheckbox = By.name("i_agree");
     private final By registerButton = By.id("register_btn");
+    private final By registerVisibility = By.xpath("//h3[normalize-space()='CREATE ACCOUNT']");
 
-    /**
-     * Constructor initializes driver and wait.
-     */
-    public CreateAccountPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        this.js = (JavascriptExecutor) driver;
-    }
-
-    /**
-     * Waits until the loading spinner disappears.
-     */
-    private void waitForLoaderToDisappear() {
-        try {
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
-        } catch (TimeoutException ignored) {
-        }
-    }
-
-    /**
-     * Navigates to the main website homepage.
-     */
-    public void navigateToHomePage() {
-        driver.get("https://advantageonlineshopping.com/#/");
-    }
-
-    /**
-     * Opens the registration form by clicking the user icon and then "CREATE NEW ACCOUNT".
-     */
-    public void openRegistrationForm() {
-        waitForLoaderToDisappear();
-        wait.until(ExpectedConditions.elementToBeClickable(userIcon)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(createNewAccountLink));
-        waitForLoaderToDisappear();
-        WebElement createLink = driver.findElement(createNewAccountLink);
-        js.executeScript("arguments[0].click();", createLink);
-    }
 
     /**
      * Fills in all required fields of the registration form.
@@ -105,9 +72,7 @@ public class CreateAccountPage {
      */
     public void agreeToTerms() {
         WebElement checkbox = driver.findElement(agreeCheckbox);
-        if (!checkbox.isSelected()) {
             checkbox.click();
-        }
     }
 
     /**
@@ -120,12 +85,8 @@ public class CreateAccountPage {
     /**
      * Verifies if registration was successful by checking the final URL.
      */
-    public boolean isRegistrationSuccessful() {
-        try {
-            wait.until(ExpectedConditions.urlToBe("https://advantageonlineshopping.com/#/"));
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+    public String isRegistrationSuccessful() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(registerVisibility));
+        return wait.until(ExpectedConditions.elementToBeClickable(element)).getText();
     }
 }

@@ -19,8 +19,6 @@ public class HomePage {
 
     }
 
-
-
     private By homePageIdent = By.xpath("//h3[text()='SPECIAL OFFER']");
     private By userButton = By.xpath("//a[@id='menuUserLink']");
     private By myaccountButton = By.xpath("//div[@id='loginMiniTitle']//label[text()='My account']");

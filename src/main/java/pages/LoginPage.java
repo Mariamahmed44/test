@@ -15,6 +15,7 @@ public class LoginPage {
     private final WebDriverWait wait;
 
     // Locators
+    private final By createNewAccountLink = By.xpath("//a[text()='CREATE NEW ACCOUNT']");
     private final By usernameInput = By.name("username");
     private final By passwordInput = By.name("password");
     private final By signInButton = By.id("sign_in_btn");
@@ -28,6 +29,13 @@ public class LoginPage {
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+    }
+
+    public CreateAccountPage ClickOnRegisterBtn() {
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(createNewAccountLink));
+        element.click();
+        return new CreateAccountPage(driver);
+
     }
 
     /**

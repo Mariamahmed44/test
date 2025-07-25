@@ -17,7 +17,7 @@ public class SpeakersPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    private By speakersPageIden = By.xpath("//h3[normalize-space(text())='SPEAKERS']");
+    private final By speakersPageIden = By.xpath("//h3[normalize-space(text())='SPEAKERS']");
     private final By colorFilter = By.id("accordionColor");
     private final By blackColorFilter = By.id("productsColors414141");
     private final By manufactureFilter = By.xpath("//h4[normalize-space(.)='MANUFACTURER']");

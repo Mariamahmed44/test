@@ -23,12 +23,18 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
     final private By AddToCartBtn = By.xpath("//button[@name='save_to_cart']");
     final private By QuantityCheckInPopUp = By.xpath("//label[normalize-space()='QTY: 10']");
     final private By CheckoutBtnInPopUp = By.xpath("//button[@id='checkOutPopUp']");
+    final private By productNameFromPopUp = By.xpath("//h3[normalize-space()='BEATS STUDIO 2 OVER-EAR MAT...']");
 
     //Methods
     public void setQuantity(String quantity) {
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(QuantityInput));
         element.click();
         element.sendKeys(quantity);
+    }
+
+    public String getProductNameFromPopUp() {
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(productNameFromPopUp));
+        return element.getText();
     }
 
     public void clickAddToCart(){
