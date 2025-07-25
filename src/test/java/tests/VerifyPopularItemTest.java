@@ -7,12 +7,32 @@ import pages.*;
 import setup.Setup;
 
 public class VerifyPopularItemTest extends Setup {
+    public String username = "dummy";
+    public String password = "123Dummy";
     @Test
     public void VerifyPopularItem(){
+
         test.info("Test case started");
         try{
             Assert.assertTrue(homePage.CheckHomePageIsVisible());
             test.log(Status.PASS,"Home Page verified");
+        }catch (Exception e){
+            test.log(Status.FAIL,e.getCause() + e.getMessage());
+        }
+        LoginPage loginPage = homePage.ClickLoginOrSignUpButton();
+        loginPage.enterUsername(username);
+        loginPage.enterPassword(password);
+        loginPage.clickLoginButton();
+        try{
+            Assert.assertTrue(homePage.CheckHomePageIsVisible());
+            test.log(Status.PASS,"LoggedIn and Home Page Is Visible");
+        }catch (Exception e){
+            test.log(Status.FAIL,e.getCause() + e.getMessage());
+        }
+
+        try{
+            Assert.assertEquals(username, homePage.UserLoggedInUser());
+            test.log(Status.PASS,"User Matches Logged In User Name");
         }catch (AssertionError e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
