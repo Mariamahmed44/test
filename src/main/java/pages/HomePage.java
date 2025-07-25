@@ -20,7 +20,7 @@ public class HomePage {
 
     private By homePageIdent = By.xpath("//h3[text()='SPECIAL OFFER']");
     private By userButton = By.xpath("//a[@id='menuUserLink']");
-    //private By loogedinusername = By.xpath("//span[@class='hi-user containMiniTitle ng-binding' and text()='"']");
+    private By loogedinusername = By.xpath("//span[@class='hi-user containMiniTitle ng-binding']");
     private By myaccountButton = By.xpath("//div[@id='loginMiniTitle']//label[text()='My account']");
     private By myordersButton = By.xpath("//div[@id='loginMiniTitle']//label[text()='My orders']");
     private By logoutButton = By.xpath("//div[@id='loginMiniTitle']//label[text()='Sign out']");
@@ -28,21 +28,27 @@ public class HomePage {
     private By tabletsButton = By.xpath("//div[@id='tabletsImg']");
     private By headphonesButton = By.xpath("//div[@id='headphonesImg']");
     private By hpEliteBookFolioButton = By.xpath("//label[@id='details_10']");
-
+    private By exploreNowIden = By.xpath("//h2[@ng-bind-html='img.message | trustHtml'][normalize-space()='ALL YOU WANT FROM A TABLET']");
+    private By exploreNowButton = By.xpath("(//button[@name='explore_now_btn'][normalize-space()='EXPLORE NOW'])[1]");
 
     public boolean CheckHomePageIsVisible() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(homePageIdent));
+        return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+    }
+
+    public boolean CheckExploreNowIsVisible() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(exploreNowIden));
         return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
     }
     public boolean CheckSpeakersButtonIsVisible() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(speakersButton));
         return wait.until(ExpectedConditions.elementToBeClickable(element)).isDisplayed();
     }
-//    public boolean isUserLoggedIn(String username) {
-//        WebElement userText = wait.until(ExpectedConditions.visibilityOfElementLocated(loogedinusername));
-//        return userText.getText().contains(username);
-//    }
-//To Check Home Page Is Visible
+    public String UserLoggedInUser() {
+        WebElement userText = wait.until(ExpectedConditions.visibilityOfElementLocated(loogedinusername));
+        return userText.getText();
+    }
+
 
     public LoginPage ClickLoginOrSignUpButton(){
 
@@ -74,21 +80,26 @@ public class HomePage {
     }
 
 
-    public SpeakersPage clickSpeakersButton() {
+    public SpeakersPage ClickSpeakersButton() {
         wait.until(ExpectedConditions.elementToBeClickable(speakersButton)).click();
         return new SpeakersPage(driver);
     }
 
 
-    public TabletsPage clickTabletsButton() {
+    public TabletsPage ClickTabletsButton() {
         wait.until(ExpectedConditions.elementToBeClickable(tabletsButton)).click();
         return new TabletsPage(driver);
       }
 
-    public HeadPhonesPage clickHeadphonesButton() {
+    public HeadPhonesPage ClickHeadphonesButton() {
         wait.until(ExpectedConditions.elementToBeClickable(headphonesButton)).click();
         return new HeadPhonesPage(driver);
       }
+    public TabletsPage ClickExploreNowButton(){
+
+        wait.until(ExpectedConditions.elementToBeClickable(exploreNowButton)).click();
+        return new TabletsPage(driver);
+    }
 
     public void ScrollToPopularItemsArea(){
         JavascriptExecutor js=(JavascriptExecutor)driver;
@@ -96,10 +107,15 @@ public class HomePage {
         js.executeScript("window.scroll(0,1200)");
     }
     //JavaScript Code To Scroll To Popular Items Area
-
+    public void ScrollToExploreMoreArea(){
+        JavascriptExecutor js=(JavascriptExecutor)driver;
+        //Define JavaScript Executor To Be Able To Add Scripts Like Scroll Down Etc.
+        js.executeScript("window.scroll(0,800)");
+    }
     public HPEliteBookFolioDetailsPage clickHPEliteBookFolioButton() {
         wait.until(ExpectedConditions.elementToBeClickable(hpEliteBookFolioButton)).click();
         return new HPEliteBookFolioDetailsPage(driver);
     }
+
 
 }

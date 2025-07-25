@@ -2,7 +2,7 @@
 <suite name="MyTestSuite">
     <test name="AllTests">
         <classes>
-            <class name="tests.TwoItemsPurchaseTest"/>
+            <class name="tests.EditAndDeleteItemsTest"/>
         </classes>
     </test>
 </suite>

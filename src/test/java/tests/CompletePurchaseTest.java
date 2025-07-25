@@ -33,7 +33,7 @@ public class CompletePurchaseTest extends Setup {
         }catch (AssertionError e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
-        SpeakersPage speakersPage =homePage.clickSpeakersButton();
+        SpeakersPage speakersPage =homePage.ClickSpeakersButton();
         try{
             Assert.assertTrue(speakersPage.CheckSpeakersPageIsVisible());
             test.log(Status.PASS,"Successfully navigated to Speakers category and verified item visibility");
@@ -63,7 +63,7 @@ public class CompletePurchaseTest extends Setup {
 
         hpRoarMiniWirelessSpeakerDetailsPage.ClickOnHomeFromBreadCrumb();
         //hpRoarMiniWirelessSpeakerDetailsPage.ClickCheckout();
-        HeadPhonesPage headPhonesPage = homePage.clickHeadphonesButton();
+        HeadPhonesPage headPhonesPage = homePage.ClickHeadphonesButton();
         BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage beatsStudio20DetailsPage = headPhonesPage.ClickOnProduct();
         beatsStudio20DetailsPage.setQuantity("10");
         beatsStudio20DetailsPage.clickAddToCart();

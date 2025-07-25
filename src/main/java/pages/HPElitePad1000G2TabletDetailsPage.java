@@ -22,6 +22,7 @@ public class HPElitePad1000G2TabletDetailsPage {
     final private By ProductName = By.xpath("//h1[@class='roboto-regular screen768 ng-binding']");
     final private By TabletBreadCrumb = By.xpath("//a[@class='ng-binding']");
     final private By GrayColor = By.xpath("//span[@title='GRAY']");
+    final private By ProductNameFromPopUP = By.xpath("//h3[normalize-space()='HP ELITEPAD 1000 G2 TABLET']");
 
 
 
@@ -36,6 +37,10 @@ public class HPElitePad1000G2TabletDetailsPage {
     }
     public String VerifyElitePadG2Name() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductName));
+        return wait.until(ExpectedConditions.visibilityOf(element)).getText();
+    }
+    public String VerifyElitePadG2NameInPopUp() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(ProductNameFromPopUP));
         return wait.until(ExpectedConditions.visibilityOf(element)).getText();
     }
 

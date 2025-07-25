@@ -19,17 +19,23 @@ public class TabletsPage {
     }
 
     //Locators
+    final private By tabletsPageIden = By.xpath("//h1[normalize-space()='TRAVEL CONFIDENTLY AND IN STYLE']");
     final private By HPElitePad100 = By.xpath("//img[@id='16']");
     final private By HPEliteX21011 = By.xpath("//img[@id='17']");
 
     //METHODS
-    public HPElitePad1000G2TabletDetailsPage ClickOnTheProduct(){
+
+    public boolean CheckTabletsPageIsVisible() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(tabletsPageIden));
+        return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+    }
+    public HPElitePad1000G2TabletDetailsPage ClickOnFirstProduct(){
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(HPElitePad100));
         element.click();
         return new HPElitePad1000G2TabletDetailsPage(driver);
     }
 
-    public HPElite_x2_1011G1TabletDetailsPage ClickOnProduct(){
+    public HPElite_x2_1011G1TabletDetailsPage ClickOnSecondProduct(){
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(HPEliteX21011));
         element.click();
         return new HPElite_x2_1011G1TabletDetailsPage(driver);

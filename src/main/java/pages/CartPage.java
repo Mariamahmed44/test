@@ -19,11 +19,16 @@ public class CartPage {
     }
 
     //LOCATORS
+    final private By CartPageIden = By.xpath("//h3[@class='roboto-regular center sticky fixedImportant ng-binding']");
     final private By EditBtn = By.xpath("//a[@class='edit ng-scope']");
 
 
 
     //METHODS
+    public boolean CheckCartPageIsVisible() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(CartPageIden));
+        return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+    }
     public HPElitePad1000G2TabletDetailsPage ClickEdit(){
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(EditBtn));
         element.click();
