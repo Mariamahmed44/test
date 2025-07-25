@@ -24,7 +24,7 @@ public class CompletePurchaseTest extends Setup {
         }catch (AssertionError e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
-        createAccountPage.fillRegistrationForm("mohamed5", "sherif8@gmail.com", "Test1234", "sherif", "hamada", "01234567891", "Egypt", "giza", "12 St", "giza", "12511");
+        createAccountPage.fillRegistrationForm("mohamed01", "sherif8@gmail.com", "Test1234", "sherif", "hamada", "01234567891", "Egypt", "giza", "12 St", "giza", "12511");
         createAccountPage.agreeToTerms();
         createAccountPage.submitRegistration();
         try{
@@ -84,7 +84,7 @@ public class CompletePurchaseTest extends Setup {
         checkout.clickNextInShippingDetails();
 
 
-
+        test.info("Test case Ended");
 
 
     }
