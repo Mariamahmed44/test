@@ -134,14 +134,7 @@ public class EditAndDeleteItemsTest extends Setup {
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
 
-
-
-
-
-
-
-
-
+        test.info("Test case Ended");
     }
 
 

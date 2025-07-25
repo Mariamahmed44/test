@@ -50,10 +50,10 @@ public class Setup {
     }
 
 
-//    @AfterClass
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
+    }
 
     @AfterSuite
     public void tearDownExtentReport() {
