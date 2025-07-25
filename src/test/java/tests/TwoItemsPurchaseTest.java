@@ -7,7 +7,8 @@ import pages.*;
 import setup.Setup;
 
 public class TwoItemsPurchaseTest extends Setup {
-
+    String username = "ALI";
+    String password = "Pzx@2SvXmbXw";
 
     @Test
     public void verifyTwoItemsPurchased() {
@@ -19,8 +20,8 @@ public class TwoItemsPurchaseTest extends Setup {
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
         LoginPage loginPage = homePage.ClickLoginOrSignUpButton();
-        loginPage.enterUsername("ALI");
-        loginPage.enterPassword("Pzx@2SvXmbXw");
+        loginPage.enterUsername(username);
+        loginPage.enterPassword(password);
         loginPage.clickLoginButton();
         try{
             Assert.assertTrue(homePage.CheckHomePageIsVisible());

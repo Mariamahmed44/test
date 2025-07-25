@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 
 public class HomePage {
@@ -21,6 +20,7 @@ public class HomePage {
 
     private By homePageIdent = By.xpath("//h3[text()='SPECIAL OFFER']");
     private By userButton = By.xpath("//a[@id='menuUserLink']");
+    //private By loogedinusername = By.xpath("//span[@class='hi-user containMiniTitle ng-binding' and text()='"']");
     private By myaccountButton = By.xpath("//div[@id='loginMiniTitle']//label[text()='My account']");
     private By myordersButton = By.xpath("//div[@id='loginMiniTitle']//label[text()='My orders']");
     private By logoutButton = By.xpath("//div[@id='loginMiniTitle']//label[text()='Sign out']");
@@ -28,7 +28,7 @@ public class HomePage {
     private By tabletsButton = By.xpath("//div[@id='tabletsImg']");
     private By headphonesButton = By.xpath("//div[@id='headphonesImg']");
     private By hpEliteBookFolioButton = By.xpath("//label[@id='details_10']");
-//div[@id='speakersImg']//span[@id='speakersTxt' and text()='SPEAKERS']
+
 
     public boolean CheckHomePageIsVisible() {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(homePageIdent));
@@ -38,6 +38,10 @@ public class HomePage {
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(speakersButton));
         return wait.until(ExpectedConditions.elementToBeClickable(element)).isDisplayed();
     }
+//    public boolean isUserLoggedIn(String username) {
+//        WebElement userText = wait.until(ExpectedConditions.visibilityOfElementLocated(loogedinusername));
+//        return userText.getText().contains(username);
+//    }
 //To Check Home Page Is Visible
 
     public LoginPage ClickLoginOrSignUpButton(){
