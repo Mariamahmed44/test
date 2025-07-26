@@ -16,7 +16,7 @@ public class CartPage {
     //CONSTRUCTOR
     public CartPage(WebDriver driver) {
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 
     //LOCATORS
@@ -31,13 +31,13 @@ public class CartPage {
     }
 
     public HPElitePad1000G2TabletDetailsPage ClickEdit() {
-        waitForPopupToDisappear(driver);
+        //waitForPopupToDisappear(driver);
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(EditBtn));
         element.click();
         return new HPElitePad1000G2TabletDetailsPage(driver);
     }
 
-    public void waitForPopupToDisappear(WebDriver driver) {
+    /*public void waitForPopupToDisappear(WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         By CartPopUp = By.cssSelector("li[data-ng-mouseenter='enterCart()'] ul li table");
 
@@ -48,5 +48,5 @@ public class CartPage {
         } catch (TimeoutException e) {
             System.out.println("Cart Popup did not close within timeout.");
         }
-    }
+    }*/
 }

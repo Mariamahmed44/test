@@ -44,7 +44,20 @@ public class CheckOutPage {
     //locate the confirmation message after placed the order successfully
     final By thankYouMessageLocator = By.xpath("//span[text()='Thank you for buying with Advantage']");
 
+    //locate safePay username field
+    final By safePayUsername = By.xpath("//input[@name='safepay_username']");
 
+    //locate safePay password field
+    final By safePayPassword = By.xpath("//input[@name='safepay_password']");
+
+    //locate save changes checkbox
+    final By saveChanges = By.xpath("//input[@name='save_safepay']");
+
+    //locate pay now button
+    final By payNowBtn = By.xpath("//button[@id='pay_now_btn_SAFEPAY']");
+
+    //locate thank you for buying text
+    final By checkoutConfirmationMessage = By.xpath("//div[@id='orderPaymentSuccess']//h2");
 
 
     //-----------------methods-------------
@@ -96,5 +109,28 @@ public class CheckOutPage {
         WebElement confirmationMessage = wait.until(ExpectedConditions.elementToBeClickable(thankYouMessageLocator));
         return  confirmationMessage.isDisplayed();
     }
+
+    public void SetSafePayUsername(String Username){
+        driver.findElement(safePayUsername).sendKeys(Username);
+    }
+
+    public void SetSafePayPassword(String Password){
+        driver.findElement(safePayPassword).sendKeys(Password);
+    }
+
+    public void ClickOnSaveChanges(){
+        driver.findElement(saveChanges).click();
+    }
+
+    public void ClickOnPayNow(){
+        driver.findElement(payNowBtn).click();
+    }
+
+    public String CheckoutConfirmationMessageVisibility(){
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(checkoutConfirmationMessage));
+        return element.getText();
+    }
+
+
 
 }

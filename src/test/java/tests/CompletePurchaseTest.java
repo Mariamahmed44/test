@@ -94,6 +94,17 @@ public class CompletePurchaseTest extends Setup {
         }
         CheckOutPage checkout = beatsStudio20DetailsPage.clickCheckout();
         checkout.clickNextInShippingDetails();
+        checkout.SetSafePayUsername("sherif");
+        checkout.SetSafePayPassword("Test1234");
+        checkout.ClickOnSaveChanges();
+        checkout.ClickOnPayNow();
+        try{
+            Assert.assertEquals("Thank you for buying with Advantage", checkout.CheckoutConfirmationMessageVisibility());
+            test.log(Status.PASS,"Successful Checkout");
+        }catch (AssertionError e){
+            test.log(Status.FAIL,e.getCause() + e.getMessage());
+        }
+
         test.info("Test case Ended");
     }
 }
