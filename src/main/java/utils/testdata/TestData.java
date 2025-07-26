@@ -1,4 +1,4 @@
-package utils;
+package utils.testdata;
 
 public class TestData {
     public static String username;
