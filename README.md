@@ -39,7 +39,8 @@ project-root/
 ├── src/
 │   ├── main/
 │   │   └── java/
-│   │       └── pages/           # Page Object Model (POM) classes
+│   │       ├── pages/           # Page Object Model (POM) classes
+│   │       └── utils/testdata/   # Test data classes and files (constants & mock inputs)
 │   │       
 │   └── test/
 │       └── java/
