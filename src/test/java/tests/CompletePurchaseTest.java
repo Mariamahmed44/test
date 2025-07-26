@@ -96,7 +96,7 @@ public class CompletePurchaseTest extends Setup {
         checkout.clickNextInShippingDetails();
         checkout.SetSafePayUsername("sherif");
         checkout.SetSafePayPassword("Test1234");
-        checkout.ClickOnSaveChanges();
+//        checkout.ClickOnSaveChanges();
         checkout.ClickOnPayNow();
         try{
             Assert.assertEquals("Thank you for buying with Advantage", checkout.CheckoutConfirmationMessageVisibility());

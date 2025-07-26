@@ -119,9 +119,8 @@ public class CheckOutPage {
     }
 
     public void ClickOnSaveChanges(){
-
-        WebElement payNow = wait.until(ExpectedConditions.elementToBeClickable(saveChanges));
-        payNow.click();
+        WebElement SaveChanges = wait.until(ExpectedConditions.elementToBeClickable(saveChanges));
+        SaveChanges.click();
     }
 
     public void ClickOnPayNow(){
