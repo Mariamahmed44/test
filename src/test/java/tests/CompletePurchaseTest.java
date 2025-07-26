@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
 import setup.Setup;
-import utils.TestData;
+import utils.testdata.TestData;
 
 import java.util.UUID;
 
