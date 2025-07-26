@@ -119,7 +119,9 @@ public class CheckOutPage {
     }
 
     public void ClickOnSaveChanges(){
-        driver.findElement(saveChanges).click();
+
+        WebElement payNow = wait.until(ExpectedConditions.elementToBeClickable(saveChanges));
+        payNow.click();
     }
 
     public void ClickOnPayNow(){
