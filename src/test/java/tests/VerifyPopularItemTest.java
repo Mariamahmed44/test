@@ -51,7 +51,22 @@ public class VerifyPopularItemTest extends Setup {
         }catch (AssertionError e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
+SearchPage searchPage=new SearchPage(driver);
+        searchPage.clickSearchButton();
+        try{
+            Assert.assertTrue(searchPage.isSearchBarPresent());
+            test.log(Status.PASS,"Search bar is present");
+        }catch (AssertionError e){
+            test.log(Status.FAIL,e.getCause() + e.getMessage());
+        }
+        searchPage.SearchForProduct("HP ELITEBOOK FOLIO");
+        try{
+            Assert.assertEquals("No results for \"HP ELITEBOOK FOLIO\"", searchPage.VerifyNoResultsMessageIsDisplayed());
 
+            test.log(Status.PASS,"Correct display of no available product");
+        }catch (AssertionError e){
+            test.log(Status.FAIL,e.getCause() + e.getMessage());
+        }
         test.info("Test case Ended");
 
 
