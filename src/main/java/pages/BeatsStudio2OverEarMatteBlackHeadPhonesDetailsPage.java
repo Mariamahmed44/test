@@ -40,7 +40,7 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
 
     public void clickAddToCart(){
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(AddToCartBtn));
-        waitForPopupToDisappear(driver);
+        //waitForPopupToDisappear(driver);
         element.click();
     }
 
@@ -54,7 +54,7 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
         return new CheckOutPage(driver);
     }
 
-    public void waitForPopupToDisappear(WebDriver driver) {
+    /*public void waitForPopupToDisappear(WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         By popupLocator = By.cssSelector("div.PopUp");
 
@@ -64,10 +64,5 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
             System.out.println("Popup closed.");
         } catch (TimeoutException e) {
             System.out.println("Popup did not close within timeout.");
-        }
+        }*/
     }
-
-
-
-
-}

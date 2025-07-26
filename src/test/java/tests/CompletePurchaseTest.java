@@ -78,6 +78,7 @@ public class CompletePurchaseTest extends Setup {
         BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage beatsStudio20DetailsPage = headPhonesPage.ClickOnProduct();
         beatsStudio20DetailsPage.setQuantity("10");
         beatsStudio20DetailsPage.clickAddToCart();
+        beatsStudio20DetailsPage.clickAddToCart();
         try{
             Assert.assertEquals("BEATS STUDIO 2 OVER-EAR MAT...", beatsStudio20DetailsPage.getProductNameFromPopUp());
             test.log(Status.PASS,"'BEATS STUDIO 2 OVER-EAR MAT added to cart and matches the name in pop-up'");
