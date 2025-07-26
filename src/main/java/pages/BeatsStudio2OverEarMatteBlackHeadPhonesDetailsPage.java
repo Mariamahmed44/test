@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -15,12 +16,12 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
     //CONSTRUCTOR
     public BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage(WebDriver driver){
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 
     //LOCATORS
     final private By QuantityInput = By.xpath("//input[@name='quantity']");
-    final private By AddToCartBtn = By.xpath("//button[@name='save_to_cart']");
+    final private By AddToCartBtn = By.cssSelector("button[name='save_to_cart']");
     final private By QuantityCheckInPopUp = By.xpath("//label[normalize-space()='QTY: 10']");
     final private By CheckoutBtnInPopUp = By.xpath("//button[@id='checkOutPopUp']");
     final private By productNameFromPopUp = By.xpath("//h3[normalize-space()='BEATS STUDIO 2 OVER-EAR MAT...']");
@@ -38,7 +39,9 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
     }
 
     public void clickAddToCart(){
-        driver.findElement(AddToCartBtn).click();
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(AddToCartBtn));
+        waitForPopupToDisappear(driver);
+        element.click();
     }
 
     public String getPopupQuantity() {
@@ -49,6 +52,19 @@ public class BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage {
     public CheckOutPage clickCheckout() {
         driver.findElement(CheckoutBtnInPopUp).click();
         return new CheckOutPage(driver);
+    }
+
+    public void waitForPopupToDisappear(WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        By popupLocator = By.cssSelector("div.PopUp");
+
+        try {
+            // Wait until the popup is invisible or removed
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(popupLocator));
+            System.out.println("Popup closed.");
+        } catch (TimeoutException e) {
+            System.out.println("Popup did not close within timeout.");
+        }
     }
 
 

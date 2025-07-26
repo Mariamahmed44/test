@@ -29,7 +29,8 @@ public class HPElite_x2_1011G1TabletDetailsPage  {
     }
 
     public void EliteTabletG1ClickAddToCart() {
-        driver.findElement(ProductAddToCart).click();
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(ProductAddToCart));
+        element.click();
 
     }
     public String VerifyEliteTabletG1Name() {

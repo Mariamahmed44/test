@@ -5,12 +5,13 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
 import setup.Setup;
+import utils.TestData;
 
 public class VerifyPopularItemTest extends Setup {
-    public String username = "dummy";
-    public String password = "123Dummy";
     @Test
     public void VerifyPopularItem(){
+        String username = TestData.username;
+        String password = TestData.password;
 
         test.info("Test case started");
         try{

@@ -5,10 +5,22 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
 import setup.Setup;
+import utils.TestData;
+
+import java.util.UUID;
 
 public class CompletePurchaseTest extends Setup {
+    public String generateRandomUsername() {
+        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        return "user_" + uuid;
+    }
     @Test
     public void CompletePurchase(){
+        String Username =generateRandomUsername();
+        String Password = "Test1234";
+
+        TestData.username = Username;
+        TestData.password = Password;
         test.info("Test case started");
         try{
             Assert.assertTrue(homePage.CheckHomePageIsVisible());
@@ -24,7 +36,7 @@ public class CompletePurchaseTest extends Setup {
         }catch (AssertionError e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
-        createAccountPage.fillRegistrationForm("mohamed01", "sherif8@gmail.com", "Test1234", "sherif", "hamada", "01234567891", "Egypt", "giza", "12 St", "giza", "12511");
+        createAccountPage.fillRegistrationForm(Username, "sherif8@gmail.com", Password, "sherif", "hamada", "01234567891", "Egypt", "giza", "12 St", "giza", "12511");
         createAccountPage.agreeToTerms();
         createAccountPage.submitRegistration();
         try{
@@ -62,7 +74,6 @@ public class CompletePurchaseTest extends Setup {
         }
 
         hpRoarMiniWirelessSpeakerDetailsPage.ClickOnHomeFromBreadCrumb();
-        //hpRoarMiniWirelessSpeakerDetailsPage.ClickCheckout();
         HeadPhonesPage headPhonesPage = homePage.ClickHeadphonesButton();
         BeatsStudio2OverEarMatteBlackHeadPhonesDetailsPage beatsStudio20DetailsPage = headPhonesPage.ClickOnProduct();
         beatsStudio20DetailsPage.setQuantity("10");
@@ -82,10 +93,6 @@ public class CompletePurchaseTest extends Setup {
         }
         CheckOutPage checkout = beatsStudio20DetailsPage.clickCheckout();
         checkout.clickNextInShippingDetails();
-
-
         test.info("Test case Ended");
-
-
     }
 }

@@ -5,13 +5,14 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
 import setup.Setup;
+import utils.TestData;
 
 public class EditAndDeleteItemsTest extends Setup {
-    public String username = "ALI";
-    public String password = "Pzx@2SvXmbXw";
-
     @Test
     public void verifyEditAndDeleteOptionsForProductItems() {
+        String username = TestData.username;
+        String password = TestData.password;
+
         test.info("Test case started");
         try{
             Assert.assertTrue(homePage.CheckHomePageIsVisible());
