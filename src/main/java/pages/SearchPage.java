@@ -19,9 +19,9 @@ public class SearchPage {
    }
 
    //LOCATORS
-   final private By SearchButton = By.xpath("(//*[@id=\'menuSearch\'])[2]");
-   final private By SearchBar = By.xpath("//input[@name='mobile_search']");
-   final private By NoResultsMessage = By.xpath("//span[@class='ng-binding']");
+   final private By SearchButton = By.xpath("/html/body/header/nav/ul/li[4]/a");
+   final private By SearchBar = By.xpath("//*[@id=\"autoComplete\"]");
+   final private By NoResultsMessage = By.xpath("//*[@id=\"searchPage\"]/div[3]/div/label/span");
 
    //METHODS
    public void clickSearchButton() { driver.findElement(SearchButton).click(); }
