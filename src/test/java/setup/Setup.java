@@ -11,6 +11,7 @@ import org.testng.annotations.*;
 import pages.HomePage;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class Setup {
@@ -23,11 +24,12 @@ public class Setup {
 
 
     @BeforeSuite
-    public void setUpExtentReport() {
+    public void setUpExtentReport() throws IOException {
         extent = new ExtentReports();
         htmlReporter = new ExtentSparkReporter("src/test/java/utils/reports/UI_test_report.html");
         extent.attachReporter(htmlReporter);
         htmlReporter.config().setTheme(Theme.DARK);
+        htmlReporter.config().setCss(".nav-logo .logo { background-image: url('https://ik.imagekit.io/sfkyshz6p/Konecta-Logo.png') !important; }");
     }
 
     @BeforeClass
