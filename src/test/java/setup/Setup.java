@@ -3,6 +3,7 @@ package setup;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -26,6 +27,7 @@ public class Setup {
         extent = new ExtentReports();
         htmlReporter = new ExtentSparkReporter("src/test/java/utils/reports/UI_test_report.html");
         extent.attachReporter(htmlReporter);
+        htmlReporter.config().setTheme(Theme.DARK);
     }
 
     @BeforeClass

@@ -1,6 +1,9 @@
 package tests;
 
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
@@ -45,14 +48,20 @@ public class VerifyPopularItemTest extends Setup {
         }catch (AssertionError e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
-        try{
-            Assert.assertEquals("HP ELITEBOOK FOLIO", HPEliteBookPage.VerifyEliteBookName());
 
-            test.log(Status.PASS,"Correct product details page of HP ELITEBOOK FOLIO");
-        }catch (AssertionError e){
-            test.log(Status.FAIL,e.getCause() + e.getMessage());
+        try {
+            Assert.assertEquals( HPEliteBookPage.VerifyEliteBookName(),"HP ELITEBOOK FOLIO");
+            test.log(Status.PASS, "Correct product details page of HP ELITEBOOK FOLIO");
+        } catch (AssertionError e) {
+            // Take screenshot as base64
+            String base64Image = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+
+            // Attach to Extent Report as embedded Base64 image
+            test.fail("Bug: Unexpected Item Name And Bread Crumb Name , "+e.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromBase64String(base64Image).build());
+
         }
-SearchPage searchPage=new SearchPage(driver);
+        SearchPage searchPage=new SearchPage(driver);
         searchPage.clickSearchButton();
         try{
             Assert.assertTrue(searchPage.isSearchBarPresent());
@@ -69,7 +78,6 @@ SearchPage searchPage=new SearchPage(driver);
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
         test.info("Test case Ended");
-
 
 
     }

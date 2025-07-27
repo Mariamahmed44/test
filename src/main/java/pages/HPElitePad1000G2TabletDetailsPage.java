@@ -54,9 +54,12 @@ public class HPElitePad1000G2TabletDetailsPage {
         element.click();
     }
 
-    public CartPage ClickAddToCart(){
+    public CartPage ClickAddToCartAfterEdit(){
         driver.findElement(ProductAddToCart).click();
         return new CartPage(driver);
+    }
+    public void ClickAddToCart(){
+        driver.findElement(ProductAddToCart).click();
     }
 
 

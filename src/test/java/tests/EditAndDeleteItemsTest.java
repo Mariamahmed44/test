@@ -127,7 +127,7 @@ public class EditAndDeleteItemsTest extends Setup {
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
         hpElitePadDetailsPage.ClickOnGreyColorToEdit();
-        hpElitePadDetailsPage.ClickAddToCart();
+        hpElitePadDetailsPage.ClickAddToCartAfterEdit();
         try{
             Assert.assertTrue(cartPage.CheckCartPageIsVisible());
             test.log(Status.PASS,"Cart is displayed correctly, reflecting the added product");
