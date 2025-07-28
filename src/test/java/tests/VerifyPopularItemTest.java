@@ -70,13 +70,25 @@ public class VerifyPopularItemTest extends Setup {
             test.log(Status.FAIL,e.getCause() + e.getMessage());
         }
         searchPage.SearchForProduct("HP ELITEBOOK FOLIO");
-        try{
-            Assert.assertEquals("No results for \"HP ELITEBOOK FOLIO\"", searchPage.VerifyNoResultsMessageIsDisplayed());
+        try {
+            Assert.assertEquals(  searchPage.VerifyNoResultsMessageIsDisplayed(),"HP ELITEBOOK FOLIO");
+            test.log(Status.PASS, "Correct Display of HP ELITEBOOK FOLIO");
+        } catch (AssertionError e) {
+            // Take screenshot as base64
+            String base64Image = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+
+            // Attach to Extent Report as embedded Base64 image
+            test.fail("Bug:No Item Found , "+e.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromBase64String(base64Image).build());
+
+        }
+       /* try{
+            Assert.assertEquals("HP ELITEBOOK FOLIO", searchPage.VerifyNoResultsMessageIsDisplayed());
 
             test.log(Status.PASS,"Correct display of no available product");
         }catch (AssertionError e){
             test.log(Status.FAIL,e.getCause() + e.getMessage());
-        }
+        }*/
         test.info("Test case Ended");
 
 
