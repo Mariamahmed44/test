@@ -28,8 +28,18 @@ public class Setup {
         extent = new ExtentReports();
         htmlReporter = new ExtentSparkReporter("src/test/java/utils/reports/UI_test_report.html");
         extent.attachReporter(htmlReporter);
-        htmlReporter.config().setTheme(Theme.DARK);
-        htmlReporter.config().setCss(".nav-logo .logo { background-image: url('https://ik.imagekit.io/sfkyshz6p/Konecta%20Logo-Yellow.png') !important; }");
+        //htmlReporter.config().setTheme(Theme.DARK);
+        //htmlReporter.config().setCss(".nav-logo .logo { background-image: url('https://ik.imagekit.io/sfkyshz6p/Konecta%20Logo-Yellow.png') !important; }");
+        //htmlReporter.config().setCss(".nav-logo .logo { background-image: url('https://ik.imagekit.io/sfkyshz6p/Konecta%20Logo-Blue.png') !important; }");
+        //htmlReporter.config().setCss(".navbar, .vheader { background-color: #2900ca !important; }");
+        htmlReporter.config().setCss(
+                ".nav-logo .logo { background-image: url('https://ik.imagekit.io/sfkyshz6p/Konecta%20Logo-Yellow.png') !important; }" +
+                        ".report-logo > img { content: url('https://ik.imagekit.io/sfkyshz6p/Konecta%20Logo-Yellow.png') !important; height: 50px; }" +
+                        ".navbar, .vheader { background-color: #2900ca !important; }" +
+                        ".nav-left a, .nav-right a, .nav-left i, .nav-right i { color: white !important; }"
+        );
+
+
     }
 
     @BeforeClass
