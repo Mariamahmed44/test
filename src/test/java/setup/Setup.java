@@ -29,7 +29,7 @@ public class Setup {
         htmlReporter = new ExtentSparkReporter("src/test/java/utils/reports/UI_test_report.html");
         extent.attachReporter(htmlReporter);
         htmlReporter.config().setTheme(Theme.DARK);
-        htmlReporter.config().setCss(".nav-logo .logo { background-image: url('https://ik.imagekit.io/sfkyshz6p/Konecta-Logo.png') !important; }");
+        htmlReporter.config().setCss(".nav-logo .logo { background-image: url('https://ik.imagekit.io/sfkyshz6p/Konecta%20Logo-Yellow.png') !important; }");
     }
 
     @BeforeClass
