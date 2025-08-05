@@ -9,11 +9,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Set up JDK 17  # Updated to match project requirements
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '17'  # Changed from 11 to 17 as per project specs
+        java-version: '17'
         
     - name: Cache Maven packages
       uses: actions/cache@v4
@@ -36,11 +36,11 @@ jobs:
         fi
         
     - name: Run tests with Maven
-      run: mvn clean test -X  # Added -X for debug logging
-      
+      run: mvn clean test -Dsurefire.suiteXmlFiles=testing.xml -X
+
     - name: Archive test reports
       uses: actions/upload-artifact@v4
-      if: always()  # Upload reports even if tests fail
+      if: always()
       with:
         name: test-reports
         path: |
