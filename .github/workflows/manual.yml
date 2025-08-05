@@ -248,4 +248,87 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: manual-test-results-$
+        name: manual-test-results-${{ github.run_number }}
+        path: |
+          src/test/java/utils/reports/
+          target/surefire-reports/
+          target/screenshots/
+        retention-days: 30
+        
+    - name: Upload failure screenshots
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: manual-failure-screenshots-${{ github.run_number }}
+        path: target/screenshots/
+        retention-days: 7
+        
+    - name: Publish test results
+      if: always()
+      uses: dorny/test-reporter@v1
+      with:
+        name: Manual Test Results
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
+        fail-on-error: false
+        
+  post-execution-analysis:
+    runs-on: ubuntu-latest
+    needs: [validate-inputs, manual-tests]
+    if: always()
+    
+    steps:
+    - name: Analyze test execution
+      run: |
+        echo "## Post-Execution Analysis" >> $GITHUB_STEP_SUMMARY
+        echo "**Test Execution Result**: ${{ needs.manual-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        
+        # Add execution time analysis
+        START_TIME="${{ github.event.created_at }}"
+        END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        echo "**Execution Duration**: From $START_TIME to $END_TIME" >> $GITHUB_STEP_SUMMARY
+        
+        # Performance recommendations
+        if [ "${{ github.event.inputs.parallel_execution }}" == "false" ]; then
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "💡 **Recommendation**: Consider enabling parallel execution for faster test runs" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ needs.manual-tests.result }}" == "failure" ]; then
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔍 **Next Steps for Failed Tests**:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Check the uploaded screenshots for visual clues" >> $GITHUB_STEP_SUMMARY
+          echo "2. Review the ExtentReports HTML report" >> $GITHUB_STEP_SUMMARY
+          echo "3. Examine the Surefire test reports for detailed error messages" >> $GITHUB_STEP_SUMMARY
+          echo "4. Consider running tests individually to isolate issues" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+    - name: Generate recommendations
+      run: |
+        echo "Generating test execution recommendations..."
+        
+        # Browser-specific recommendations
+        case "${{ github.event.inputs.browser }}" in
+          chrome)
+            echo "Using Chrome - most stable option for automation"
+            ;;
+          firefox)
+            echo "Using Firefox - ensure WebDriverManager is properly configured"
+            ;;
+          edge)
+            echo "Using Edge - newer browser, may have compatibility considerations"
+            ;;
+        esac
+        
+        # Environment-specific notes
+        case "${{ github.event.inputs.environment }}" in
+          production)
+            echo "Testing against production - be mindful of data modifications"
+            ;;
+          staging)
+            echo "Testing against staging - ideal for comprehensive testing"
+            ;;
+          dev)
+            echo "Testing against dev - expect potential instability"
+            ;;
+        esac
