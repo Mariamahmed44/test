@@ -25,12 +25,30 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable xvfb
         
+    - name: Check project structure
+      run: |
+        echo "Checking project files..."
+        ls -la
+        echo "Looking for testng.xml..."
+        find . -name "testng.xml" -type f || echo "testng.xml not found"
+        echo "Looking for test classes..."
+        find . -name "*Test.java" -type f | head -5 || echo "No test classes found"
+        
     - name: Run tests
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 &
         sleep 3
-        mvn clean test
+        
+        # Check if testng.xml exists, if not run tests directly
+        if [ -f "testng.xml" ]; then
+          echo "Using testng.xml configuration"
+          mvn clean test
+        else
+          echo "No testng.xml found, running tests directly"
+          # Run tests without testng.xml - let Maven discover test classes
+          mvn clean test -DskipTests=false
+        fi
         
     - name: Upload test reports
       if: always()
