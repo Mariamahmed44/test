@@ -73,6 +73,24 @@ public class Setup {
     public void tearDownExtentReport() {
         extent.flush();
     }
-
+public class BaseTest {
+    protected WebDriver driver;
+    
+    @BeforeMethod
+    public void setUp() {
+        String browser = System.getProperty("browser", "chrome");
+        String headless = System.getProperty("headless", "true");
+        
+        // Your WebDriver initialization logic
+        // Use WebDriverManager and configure based on parameters
+    }
+    
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
 
 }
