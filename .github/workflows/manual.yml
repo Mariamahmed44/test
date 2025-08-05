@@ -1,334 +1,58 @@
-name: Manual Test Execution
+name: Manual Test Run
 
 on:
   workflow_dispatch:
     inputs:
       test_class:
-        description: 'Specific test class to run (leave empty for all)'
+        description: 'Test class to run (leave empty for all tests)'
         required: false
-        type: string
       browser:
-        description: 'Browser to use for testing'
-        required: true
+        description: 'Browser'
+        required: false
         default: 'chrome'
         type: choice
         options:
         - chrome
         - firefox
-        - edge
-      environment:
-        description: 'Test environment'
-        required: true
-        default: 'production'
-        type: choice
-        options:
-        - production
-        - staging
-        - dev
-      parallel_execution:
-        description: 'Enable parallel test execution'
-        required: true
-        default: true
-        type: boolean
-      headless_mode:
-        description: 'Run tests in headless mode'
-        required: true
-        default: true
-        type: boolean
-      retry_failed_tests:
-        description: 'Retry failed tests'
-        required: true
-        default: true
-        type: boolean
-      test_timeout:
-        description: 'Test timeout in minutes'
-        required: false
-        default: '60'
-        type: string
 
 jobs:
-  validate-inputs:
+  manual-test:
     runs-on: ubuntu-latest
-    outputs:
-      test_class: ${{ steps.validate.outputs.test_class }}
-      browser: ${{ steps.validate.outputs.browser }}
-      environment: ${{ steps.validate.outputs.environment }}
-    
-    steps:
-    - name: Validate inputs
-      id: validate
-      run: |
-        echo "Validating inputs..."
-        
-        # Validate test class if provided
-        if [ -n "${{ github.event.inputs.test_class }}" ]; then
-          echo "test_class=${{ github.event.inputs.test_class }}" >> $GITHUB_OUTPUT
-          echo "Will run specific test class: ${{ github.event.inputs.test_class }}"
-        else
-          echo "test_class=all" >> $GITHUB_OUTPUT
-          echo "Will run all test classes"
-        fi
-        
-        echo "browser=${{ github.event.inputs.browser }}" >> $GITHUB_OUTPUT
-        echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
-        
-        # Validate timeout
-        TIMEOUT="${{ github.event.inputs.test_timeout }}"
-        if ! [[ "$TIMEOUT" =~ ^[0-9]+$ ]] || [ "$TIMEOUT" -lt 1 ] || [ "$TIMEOUT" -gt 180 ]; then
-          echo "Invalid timeout value. Using default: 60 minutes"
-          echo "timeout=60" >> $GITHUB_OUTPUT
-        else
-          echo "timeout=$TIMEOUT" >> $GITHUB_OUTPUT
-        fi
-        
-        echo "## Test Configuration" >> $GITHUB_STEP_SUMMARY
-        echo "- **Test Class**: ${{ github.event.inputs.test_class || 'All classes' }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Browser**: ${{ github.event.inputs.browser }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Environment**: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Parallel Execution**: ${{ github.event.inputs.parallel_execution }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Headless Mode**: ${{ github.event.inputs.headless_mode }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Retry Failed Tests**: ${{ github.event.inputs.retry_failed_tests }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Timeout**: ${TIMEOUT} minutes" >> $GITHUB_STEP_SUMMARY
-
-  manual-tests:
-    runs-on: ubuntu-latest
-    needs: validate-inputs
-    timeout-minutes: ${{ fromJson(github.event.inputs.test_timeout) || 60 }}
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Set up JDK 17
+    - name: Set up Java 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Cache Maven dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
-        
-    - name: Install and configure browser
+    - name: Install browsers
       run: |
-        BROWSER="${{ github.event.inputs.browser }}"
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable firefox xvfb
         
-        case $BROWSER in
-          chrome)
-            wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-            echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-            sudo apt-get update
-            sudo apt-get install -y google-chrome-stable
-            google-chrome --version
-            ;;
-          firefox)
-            sudo apt-get update
-            sudo apt-get install -y firefox
-            firefox --version
-            ;;
-          edge)
-            curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-            sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
-            sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge-dev.list'
-            sudo apt-get update
-            sudo apt-get install -y microsoft-edge-stable
-            microsoft-edge --version
-            ;;
-        esac
-        
-        # Install Xvfb for headless execution
-        sudo apt-get install -y xvfb
-        
-    - name: Start virtual display
-      if: github.event.inputs.headless_mode == 'true'
+    - name: Run tests
       run: |
         export DISPLAY=:99
-        Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+        Xvfb :99 -screen 0 1920x1080x24 &
         sleep 3
-        echo "Virtual display started"
         
-    - name: Prepare test environment
-      run: |
-        echo "Preparing test environment for: ${{ github.event.inputs.environment }}"
-        
-        # Set environment-specific configurations
-        case "${{ github.event.inputs.environment }}" in
-          production)
-            echo "BASE_URL=https://advantageonlineshopping.com" >> $GITHUB_ENV
-            ;;
-          staging)
-            echo "BASE_URL=https://staging.advantageonlineshopping.com" >> $GITHUB_ENV
-            ;;
-          dev)
-            echo "BASE_URL=https://dev.advantageonlineshopping.com" >> $GITHUB_ENV
-            ;;
-        esac
-        
-        # Create screenshots directory
-        mkdir -p target/screenshots
-        
-    - name: Execute tests
-      run: |
-        export DISPLAY=:99
-        
-        # Build Maven command
-        MVN_CMD="mvn test"
-        MVN_CMD="$MVN_CMD -Dbrowser=${{ github.event.inputs.browser }}"
-        MVN_CMD="$MVN_CMD -Denvironment=${{ github.event.inputs.environment }}"
-        
-        if [ "${{ github.event.inputs.headless_mode }}" == "true" ]; then
-          MVN_CMD="$MVN_CMD -Dheadless=true"
-        fi
-        
-        if [ "${{ github.event.inputs.parallel_execution }}" == "true" ]; then
-          MVN_CMD="$MVN_CMD -DthreadCount=3 -Dparallel=methods"
-        fi
-        
-        # Run specific test class if provided
-        if [ "${{ github.event.inputs.test_class }}" != "" ]; then
-          MVN_CMD="$MVN_CMD -Dtest=${{ github.event.inputs.test_class }}"
-        fi
-        
-        echo "Executing command: $MVN_CMD"
-        
-        if [ "${{ github.event.inputs.retry_failed_tests }}" == "true" ]; then
-          # First attempt
-          if ! $MVN_CMD -Dmaven.test.failure.ignore=true; then
-            echo "First attempt failed, retrying failed tests..."
-            sleep 10
-            
-            # Retry failed tests
-            if ! $MVN_CMD -Dmaven.test.failure.ignore=true -Dsurefire.rerunFailingTestsCount=2; then
-              echo "Retry attempt also failed"
-              exit 1
-            fi
-          fi
+        if [ -n "${{ github.event.inputs.test_class }}" ]; then
+          mvn test -Dtest=${{ github.event.inputs.test_class }}
         else
-          $MVN_CMD
-        fi
-      env:
-        HEADLESS: ${{ github.event.inputs.headless_mode }}
-        
-    - name: Generate test summary
-      if: always()
-      run: |
-        echo "## Test Execution Summary" >> $GITHUB_STEP_SUMMARY
-        echo "**Execution Time**: $(date)" >> $GITHUB_STEP_SUMMARY
-        echo "**Configuration**:" >> $GITHUB_STEP_SUMMARY
-        echo "- Browser: ${{ github.event.inputs.browser }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Environment: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Test Class: ${{ github.event.inputs.test_class || 'All' }}" >> $GITHUB_STEP_SUMMARY
-        
-        # Parse test results if available
-        if [ -f "target/surefire-reports/TEST-*.xml" ]; then
-          TOTAL=$(grep -h "tests=" target/surefire-reports/TEST-*.xml | sed 's/.*tests="\([0-9]*\)".*/\1/' | awk '{sum+=$1} END {print sum}')
-          FAILURES=$(grep -h "failures=" target/surefire-reports/TEST-*.xml | sed 's/.*failures="\([0-9]*\)".*/\1/' | awk '{sum+=$1} END {print sum}')
-          ERRORS=$(grep -h "errors=" target/surefire-reports/TEST-*.xml | sed 's/.*errors="\([0-9]*\)".*/\1/' | awk '{sum+=$1} END {print sum}')
-          SKIPPED=$(grep -h "skipped=" target/surefire-reports/TEST-*.xml | sed 's/.*skipped="\([0-9]*\)".*/\1/' | awk '{sum+=$1} END {print sum}')
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Results**:" >> $GITHUB_STEP_SUMMARY
-          echo "- Total Tests: $TOTAL" >> $GITHUB_STEP_SUMMARY
-          echo "- Passed: $((TOTAL - FAILURES - ERRORS - SKIPPED))" >> $GITHUB_STEP_SUMMARY
-          echo "- Failed: $FAILURES" >> $GITHUB_STEP_SUMMARY
-          echo "- Errors: $ERRORS" >> $GITHUB_STEP_SUMMARY
-          echo "- Skipped: $SKIPPED" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "$FAILURES" -gt 0 ] || [ "$ERRORS" -gt 0 ]; then
-            echo "- **Status**: ❌ FAILED" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- **Status**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
-          fi
+          mvn test
         fi
         
-    - name: Upload test artifacts
+    - name: Upload results
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: manual-test-results-${{ github.run_number }}
+        name: manual-test-results
         path: |
           src/test/java/utils/reports/
           target/surefire-reports/
           target/screenshots/
-        retention-days: 30
-        
-    - name: Upload failure screenshots
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: manual-failure-screenshots-${{ github.run_number }}
-        path: target/screenshots/
         retention-days: 7
-        
-    - name: Publish test results
-      if: always()
-      uses: dorny/test-reporter@v1
-      with:
-        name: Manual Test Results
-        path: target/surefire-reports/*.xml
-        reporter: java-junit
-        fail-on-error: false
-        
-  post-execution-analysis:
-    runs-on: ubuntu-latest
-    needs: [validate-inputs, manual-tests]
-    if: always()
-    
-    steps:
-    - name: Analyze test execution
-      run: |
-        echo "## Post-Execution Analysis" >> $GITHUB_STEP_SUMMARY
-        echo "**Test Execution Result**: ${{ needs.manual-tests.result }}" >> $GITHUB_STEP_SUMMARY
-        
-        # Add execution time analysis
-        START_TIME="${{ github.event.created_at }}"
-        END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-        echo "**Execution Duration**: From $START_TIME to $END_TIME" >> $GITHUB_STEP_SUMMARY
-        
-        # Performance recommendations
-        if [ "${{ github.event.inputs.parallel_execution }}" == "false" ]; then
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "💡 **Recommendation**: Consider enabling parallel execution for faster test runs" >> $GITHUB_STEP_SUMMARY
-        fi
-        
-        if [ "${{ needs.manual-tests.result }}" == "failure" ]; then
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔍 **Next Steps for Failed Tests**:" >> $GITHUB_STEP_SUMMARY
-          echo "1. Check the uploaded screenshots for visual clues" >> $GITHUB_STEP_SUMMARY
-          echo "2. Review the ExtentReports HTML report" >> $GITHUB_STEP_SUMMARY
-          echo "3. Examine the Surefire test reports for detailed error messages" >> $GITHUB_STEP_SUMMARY
-          echo "4. Consider running tests individually to isolate issues" >> $GITHUB_STEP_SUMMARY
-        fi
-        
-    - name: Generate recommendations
-      run: |
-        echo "Generating test execution recommendations..."
-        
-        # Browser-specific recommendations
-        case "${{ github.event.inputs.browser }}" in
-          chrome)
-            echo "Using Chrome - most stable option for automation"
-            ;;
-          firefox)
-            echo "Using Firefox - ensure WebDriverManager is properly configured"
-            ;;
-          edge)
-            echo "Using Edge - newer browser, may have compatibility considerations"
-            ;;
-        esac
-        
-        # Environment-specific notes
-        case "${{ github.event.inputs.environment }}" in
-          production)
-            echo "Testing against production - be mindful of data modifications"
-            ;;
-          staging)
-            echo "Testing against staging - ideal for comprehensive testing"
-            ;;
-          dev)
-            echo "Testing against dev - expect potential instability"
-            ;;
-        esac
