@@ -46,7 +46,11 @@
             <version>5.1.2</version>
         </dependency>
     </dependencies>
-
+<suiteXmlFiles>
+  <suiteXmlFile>testng.xml</suiteXmlFile>
+</suiteXmlFiles><suiteXmlFiles>
+  <suiteXmlFile>testng.xml</suiteXmlFile>
+</suiteXmlFiles>
     <build>
         <plugins>
             <plugin>
