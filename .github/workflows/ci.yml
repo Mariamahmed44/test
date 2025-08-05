@@ -27,28 +27,26 @@ jobs:
         
     - name: Check project structure
       run: |
-        echo "Checking project files..."
+        echo "=== Project Structure ==="
         ls -la
-        echo "Looking for testng.xml..."
+        echo "=== Looking for testng.xml ==="
         find . -name "testng.xml" -type f || echo "testng.xml not found"
-        echo "Looking for test classes..."
-        find . -name "*Test.java" -type f | head -5 || echo "No test classes found"
+        echo "=== Looking for test classes ==="
+        find . -name "*Test.java" -type f | head -10 || echo "No test classes found"
+        echo "=== pom.xml content (surefire plugin) ==="
+        grep -A 20 "maven-surefire-plugin" pom.xml || echo "No surefire plugin found"
         
-    - name: Run tests
+    - name: Run tests (bypassing testng.xml)
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 &
         sleep 3
         
-        # Check if testng.xml exists, if not run tests directly
-        if [ -f "testng.xml" ]; then
-          echo "Using testng.xml configuration"
-          mvn clean test
-        else
-          echo "No testng.xml found, running tests directly"
-          # Run tests without testng.xml - let Maven discover test classes
-          mvn clean test -DskipTests=false
-        fi
+        # Force Maven to ignore testng.xml and run tests directly
+        mvn clean test \
+          -Dsurefire.suiteXmlFiles= \
+          -DfailIfNoTests=false \
+          -Dtest=**/*Test.java
         
     - name: Upload test reports
       if: always()
@@ -58,4 +56,5 @@ jobs:
         path: |
           src/test/java/utils/reports/
           target/surefire-reports/
+          target/screenshots/
         retention-days: 7
