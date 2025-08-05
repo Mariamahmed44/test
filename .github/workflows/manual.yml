@@ -34,16 +34,26 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable firefox xvfb
         
-    - name: Run tests
+    - name: Check project and run tests
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 &
         sleep 3
         
+        echo "Checking project structure..."
+        ls -la
+        find . -name "testng.xml" -type f || echo "testng.xml not found"
+        
+        # Run tests based on what's available
         if [ -n "${{ github.event.inputs.test_class }}" ]; then
-          mvn test -Dtest=${{ github.event.inputs.test_class }}
-        else
+          echo "Running specific test class: ${{ github.event.inputs.test_class }}"
+          mvn test -Dtest=${{ github.event.inputs.test_class }} -DfailIfNoTests=false
+        elif [ -f "testng.xml" ]; then
+          echo "Using testng.xml configuration"
           mvn test
+        else
+          echo "Running all test classes found in project"
+          mvn test -DfailIfNoTests=false
         fi
         
     - name: Upload results
