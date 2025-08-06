@@ -61,7 +61,7 @@ public void setup() throws IOException {
 
     // Guarantee a unique profile directory for every test class
     Path tempProfile = Files.createTempDirectory("chrome-profile-");
-    chromeOptions.addArguments("--user-data-dir=" + tempProfile.toString());
+   // chromeOptions.addArguments("--user-data-dir=" + tempProfile.toString());
 
     driver = new ChromeDriver(chromeOptions);
     goHome();
