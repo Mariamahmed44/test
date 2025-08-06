@@ -45,15 +45,7 @@ public class Setup {
 
     }
 
-    @BeforeClass
-    public void setup() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--ignore-certificate-errors");
-        chromeOptions.addArguments("--ignore-ssl-errors=yes");
-        driver = new ChromeDriver(chromeOptions);
-        goHome();
-
-    }
+   
 
     public void goHome() {
         driver.get("https://advantageonlineshopping.com/#/");
