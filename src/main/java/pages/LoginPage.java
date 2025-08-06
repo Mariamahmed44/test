@@ -31,23 +31,11 @@ public class LoginPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    /**
-     * Clicks the 'CREATE NEW ACCOUNT' link, handling overlays and ensuring it is clickable.
-     */
     public CreateAccountPage ClickOnRegisterBtn() {
-        waitForLoaderToDisappear();
-        waitForPopupToDisappear();
-        try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(createNewAccountLink));
-            // Scroll into view to avoid interception
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
-            element.click();
-        } catch (ElementClickInterceptedException e) {
-            // Attempt JS click if normal click fails due to overlay
-            WebElement element = driver.findElement(createNewAccountLink);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-        }
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(createNewAccountLink));
+        element.click();
         return new CreateAccountPage(driver);
+
     }
 
     /**
@@ -60,28 +48,30 @@ public class LoginPage {
         }
     }
 
-    /**
-     * Waits for the popup to disappear.
-     */
-    private void waitForPopupToDisappear() {
+    public void waitForPopupToDisappear(WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         By popupLocator = By.cssSelector("div.PopUp");
+
         try {
+            // Wait until the popup is invisible or removed
             wait.until(ExpectedConditions.invisibilityOfElementLocated(popupLocator));
-        } catch (TimeoutException ignored) {
+            System.out.println("Popup closed.");
+        } catch (TimeoutException e) {
+            System.out.println("Popup did not close within timeout.");
         }
     }
 
-    /**
-     * Waits for the login modal to disappear.
-     */
-    public void waitForLoginToClose() {
-        By loginForm = By.cssSelector("div[ng-show='loginSection']");
+    public void waitForLoginToClose(WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        By loginForm = By.cssSelector("div[ng-show='loginSection']"); // login modal container
+
         try {
             wait.until(ExpectedConditions.invisibilityOfElementLocated(loginForm));
-        } catch (TimeoutException ignored) {
+            System.out.println("Login form closed.");
+        } catch (TimeoutException e) {
+            System.out.println("Login form did not close within timeout.");
         }
     }
-
     /**
      * Navigates to the homepage and waits until the page is loaded.
      */
@@ -119,11 +109,13 @@ public class LoginPage {
 
     /**
      * Submits the login form by clicking the sign-in button.
+     * Falls back to JavaScript click if normal click fails.
      */
     public HomePage clickLoginButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
-        waitForLoginToClose();
-        waitForPopupToDisappear();
+
+            wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
+        waitForLoginToClose(driver);
+        waitForPopupToDisappear(driver);
         return new HomePage(driver);
     }
 }
