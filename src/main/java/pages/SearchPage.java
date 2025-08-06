@@ -20,7 +20,7 @@ public class SearchPage {
 
    //LOCATORS
    final private By SearchButton = By.xpath("/html/body/header/nav/ul/li[4]/a");
-   final private By SearchBar = By.xpath("//*[@id=\"autoComplete\"]");
+   final private By SearchBar = By.xpath("//*[@id='autoComplete']");
    final private By NoResultsMessage = By.xpath("//*[@id=\"searchPage\"]/div[3]/div/label/span");
 
    //METHODS
