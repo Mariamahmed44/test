@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class Setup {
     protected WebDriver driver;
     protected HomePage homePage;
@@ -57,8 +60,6 @@ public class Setup {
         driver.manage().window().maximize();
         homePage = new HomePage(driver);
     }
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @BeforeClass
 public void setup() throws IOException {
