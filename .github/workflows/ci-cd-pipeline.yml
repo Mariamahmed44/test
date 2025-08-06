@@ -134,6 +134,16 @@ jobs:
         echo "Please check the test reports for details."
         echo "Failed at: $(date)"
 
+    - name: Archive test reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-reports
+        path: |
+          target/surefire-reports
+          src/test/java/utils/reports/
+        if-no-files-found: warn
+
 # Environment variables
 env:
   MAVEN_OPTS: "-Xmx1024m"
