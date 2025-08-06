@@ -4,41 +4,58 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
 public class SearchPage {
-   private WebDriver driver;
-   private WebDriverWait wait;
+    private WebDriver driver;
+    private WebDriverWait wait;
 
-   public SearchPage(WebDriver driver) {
-       this.driver = driver;
-       this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-   }
-
-   //LOCATORS
-   final private By SearchButton = By.xpath("/html/body/header/nav/ul/li[4]/a");
-   final private By SearchBar = By.xpath("//*[@id='autoComplete']");
-   final private By NoResultsMessage = By.xpath("//*[@id=\"searchPage\"]/div[3]/div/label/span");
-
-   //METHODS
-   public void clickSearchButton() { driver.findElement(SearchButton).click(); }
-
-   public boolean isSearchBarPresent() {
-       WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchBar));
-       return driver.findElement(SearchBar).isDisplayed();
-   }
-   public void SearchForProduct(String HP_ELITEBOOK_FOLIO) { //product name supposed to be without underscores
-       WebElement SearchInput = driver.findElement(SearchBar);
-       SearchInput.sendKeys(HP_ELITEBOOK_FOLIO);
-       SearchInput.sendKeys(Keys.ENTER);
-   }
-
-    public String VerifyNoResultsMessageIsDisplayed() {
-       WebElement element= wait.until(ExpectedConditions.visibilityOfElementLocated(NoResultsMessage));
-       return driver.findElement(NoResultsMessage).getText();
+    public SearchPage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(30)); // Increased timeout for reliability
     }
 
+    // LOCATORS
+    private final By searchButton = By.xpath("/html/body/header/nav/ul/li[4]/a");
+    private final By searchBar = By.id("autoComplete");
+    private final By noResultsMessage = By.xpath("//*[@id=\"searchPage\"]/div[3]/div/label/span");
+
+    // METHODS
+    public void clickSearchButton() {
+        wait.until(ExpectedConditions.elementToBeClickable(searchButton)).click();
+    }
+
+    public boolean isSearchBarPresent() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchBar));
+            return element.isDisplayed();
+        } catch (TimeoutException e) {
+            // Log or take screenshot if needed
+            return false;
+        }
+    }
+
+    public void searchForProduct(String productName) {
+        try {
+            WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(searchBar));
+            searchInput.clear(); // Always clear before typing
+            searchInput.sendKeys(productName);
+            searchInput.sendKeys(Keys.ENTER);
+        } catch (TimeoutException e) {
+            throw new RuntimeException("Search bar not found or not visible", e);
+        }
+    }
+
+    public String verifyNoResultsMessageIsDisplayed() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(noResultsMessage));
+            return element.getText();
+        } catch (TimeoutException e) {
+            return "No results message not displayed";
+        }
+    }
 }
