@@ -47,7 +47,9 @@ jobs:
     
     - name: Run CompletePurchaseTest
       run: mvn test -Dtest="CompletePurchaseTest"
-    
+   
+    - name: Run EditAndDeleteItemsTest  
+      run: mvn test -Dtest="EditAndDeleteItemsTest" -Dmaven.test.failure.ignore=true -X -e
     # FIXED: Added missing test reporting and artifact upload
     - name: Generate Test Report
       if: always()
