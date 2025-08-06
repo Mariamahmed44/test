@@ -1,4 +1,4 @@
-name: Simple TestNG Test Runner
+name: TestNG Test Runner
 
 on:
   push:
@@ -21,10 +21,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: Run specified tests
-      run: |
-        mvn test -Dtest="CompletePurchaseTest,EditAndDeleteItemsTest"
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
     
+    - name: Run tests with debugging info
+      run: |
+        mvn clean test -Dtest="CompletePurchaseTest,EditAndDeleteItemsTest" -e -X
+  
     - name: Upload test reports
       if: always()
       uses: actions/upload-artifact@v4
@@ -32,4 +39,12 @@ jobs:
         name: test-reports
         path: |
           target/surefire-reports/
-          src/test/java/utils/reports/UI_test_report.html
+          src/test/java/utils/reports/
+          target/screenshots/
+    
+    - name: Show test failures summary
+      if: failure()
+      run: |
+        echo "Test failures detected. Here's the summary:"
+        cat target/surefire-reports/*.txt || echo "No failure details found"
+        echo "Check the uploaded reports for full details"
