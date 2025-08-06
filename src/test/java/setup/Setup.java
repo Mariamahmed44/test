@@ -57,7 +57,22 @@ public class Setup {
         driver.manage().window().maximize();
         homePage = new HomePage(driver);
     }
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+@BeforeClass
+public void setup() throws IOException {
+    ChromeOptions chromeOptions = new ChromeOptions();
+    chromeOptions.addArguments("--ignore-certificate-errors");
+    chromeOptions.addArguments("--ignore-ssl-errors=yes");
+
+    // Guarantee a unique profile directory for every test class
+    Path tempProfile = Files.createTempDirectory("chrome-profile-");
+    chromeOptions.addArguments("--user-data-dir=" + tempProfile.toString());
+
+    driver = new ChromeDriver(chromeOptions);
+    goHome();
+}
     @BeforeMethod
     public void startTest(Method method){
         test = extent.createTest(method.getName());
