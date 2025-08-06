@@ -4,6 +4,7 @@
         <classes>
             <class name="tests.CompletePurchaseTest"/>
 <class name="tests.EditAndDeleteItemsTest"/>
+             <class name="tests.VerifyPopularItemTest"/>
         </classes>
     </test>
 </suite>
