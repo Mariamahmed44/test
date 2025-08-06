@@ -32,11 +32,10 @@ public class LoginPage {
     }
 
     public CreateAccountPage ClickOnRegisterBtn() {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(createNewAccountLink));
-        element.click();
-        return new CreateAccountPage(driver);
-
-    }
+    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(createNewAccountLink));
+    element.click();
+    return new CreateAccountPage(driver);
+}
 
     /**
      * Waits for the loader to disappear from the page.
