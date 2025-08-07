@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     steps:
     - name: Checkout code
@@ -25,25 +25,78 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     
+    - name: Install Chrome
+      run: |
+        # Download and install Chrome
+        Invoke-WebRequest -Uri "https://dl.google.com/chrome/install/chrome_installer.exe" -OutFile "chrome_installer.exe"
+        Start-Process -FilePath "chrome_installer.exe" -ArgumentList "/silent", "/install" -Wait
+        # Verify Chrome installation
+        & "C:\Program Files\Google\Chrome\Application\chrome.exe" --version
+      shell: powershell
+    
+    - name: Setup ChromeDriver
+      uses: nanasess/setup-chromedriver@v2
+      with:
+        chromedriver-version: 'latest'
+    
+    - name: Verify ChromeDriver
+      run: chromedriver --version
+      shell: cmd
+    
+    - name: Set environment variables for CI
+      run: |
+        echo "CI=true" >> $env:GITHUB_ENV
+        echo "GITHUB_ACTIONS=true" >> $env:GITHUB_ENV
+        echo "RUNNING_IN_CONTAINER=true" >> $env:GITHUB_ENV
+      shell: powershell
+    
+    - name: Clean up any existing Chrome processes
+      run: |
+        # Kill any existing Chrome/ChromeDriver processes
+        Get-Process chrome -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+        Get-Process chromedriver -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+        # Clean up temp directories
+        Remove-Item -Path "$env:TEMP\chrome_*" -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$env:LOCALAPPDATA\Google\Chrome\User Data\*" -Recurse -Force -ErrorAction SilentlyContinue
+      shell: powershell
+      continue-on-error: true
+    
     - name: Verify testing.xml exists
       run: |
-        if [ -f "testing.xml" ]; then
-          echo "testing.xml found"
-          cat testing.xml
-        else
-          echo "testing.xml not found in root directory"
-          find . -name "testing.xml" -type f
-        fi
+        if (Test-Path "testing.xml") {
+          Write-Host "testing.xml found"
+          Get-Content testing.xml
+        } else {
+          Write-Host "testing.xml not found in root directory"
+          Get-ChildItem -Name "testing.xml" -Recurse -ErrorAction SilentlyContinue
+        }
+      shell: powershell
         
     - name: Run tests with Maven
-      run:  mvn clean test -X
-
+      run: mvn clean test -X
+      shell: cmd
+      env:
+        CI: true
+        GITHUB_ACTIONS: true
+        RUNNING_IN_CONTAINER: true
+    
     - name: Archive test reports
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-reports
+        name: test-reports-windows
         path: |
           target/surefire-reports
           src/test/java/utils/reports/
         if-no-files-found: warn
+    
+    - name: Cleanup after tests
+      if: always()
+      run: |
+        # Kill any remaining Chrome/ChromeDriver processes
+        Get-Process chrome -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+        Get-Process chromedriver -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+        # Clean up temp directories
+        Remove-Item -Path "$env:TEMP\chrome_*" -Recurse -Force -ErrorAction SilentlyContinue
+      shell: powershell
+      continue-on-error: true
